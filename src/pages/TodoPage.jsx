@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Footer, Header, TodoCollection, TodoInput } from 'components';
 
 const dummyTodos = [
@@ -23,13 +24,45 @@ const dummyTodos = [
   },
 ];
 
+let nextTodoId = 5;
+
 const TodoPage = () => {
+  const [inputValue, setInputValue] = useState('')
+  const [todos, setTodos] = useState(dummyTodos)
+
+  //新增todo的輸入框輸入值改變時的事件處理
+  const handleChange = (value) => {
+    setInputValue(value);
+  } 
+  //
+  const handleTodoAdded = () => {
+    if (inputValue.trim().length === 0) {
+      alert('Please type in valid text!');
+      return
+    };
+    setTodos((prevTodos) => {
+      return [
+        ...prevTodos,
+        {
+          id: nextTodoId++,
+          title: inputValue,
+          isDone: false,
+        },
+      ];
+    });
+    setInputValue('');
+  }
   return (
     <div>
       TodoPage
       <Header />
-      <TodoInput />
-      <TodoCollection />
+      <TodoInput
+        inputValue={inputValue}
+        onChange={handleChange}
+        onAddTodo={handleTodoAdded}
+        onKeyDown={handleTodoAdded}
+      />
+      <TodoCollection todos={todos} />
       <Footer />
     </div>
   );
