@@ -24,7 +24,7 @@ const dummyTodos = [
   },
 ];
 
-let nextTodoId = 5;
+let nextTodoId = 4;
 
 const TodoPage = () => {
   const [inputValue, setInputValue] = useState('')
@@ -34,7 +34,7 @@ const TodoPage = () => {
   const handleChange = (value) => {
     setInputValue(value);
   } 
-  //
+  //按下"新增"按鈕或是"Enter"鍵時的事件處理
   const handleTodoAdded = () => {
     if (inputValue.trim().length === 0) {
       alert('Please type in valid text!');
@@ -52,6 +52,21 @@ const TodoPage = () => {
     });
     setInputValue('');
   }
+  //切換完成/未完成狀態的事件處理
+  const handleToggleDone = (id) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map(todo => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            isDone: !todo.isDone,
+          };
+        }
+        return todo;
+      })
+    });
+  }
+
   return (
     <div>
       TodoPage
@@ -62,7 +77,7 @@ const TodoPage = () => {
         onAddTodo={handleTodoAdded}
         onKeyDown={handleTodoAdded}
       />
-      <TodoCollection todos={todos} />
+      <TodoCollection todos={todos} onToggleDone={handleToggleDone} />
       <Footer />
     </div>
   );
