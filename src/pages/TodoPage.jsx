@@ -27,19 +27,19 @@ const dummyTodos = [
 let nextTodoId = 4;
 
 const TodoPage = () => {
-  const [inputValue, setInputValue] = useState('')
-  const [todos, setTodos] = useState(dummyTodos)
+  const [inputValue, setInputValue] = useState('');
+  const [todos, setTodos] = useState(dummyTodos);
 
   //新增todo的輸入框輸入值改變時的事件處理
   const handleChange = (value) => {
     setInputValue(value);
-  } 
+  };
   //按下"新增"按鈕或是"Enter"鍵時的事件處理
   const handleTodoAdded = () => {
     if (inputValue.trim().length === 0) {
       alert('Please type in valid text!');
-      return
-    };
+      return;
+    }
     setTodos((prevTodos) => {
       return [
         ...prevTodos,
@@ -51,11 +51,11 @@ const TodoPage = () => {
       ];
     });
     setInputValue('');
-  }
+  };
   //切換完成/未完成狀態的事件處理
   const handleToggleDone = (id) => {
     setTodos((prevTodos) => {
-      return prevTodos.map(todo => {
+      return prevTodos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
@@ -63,42 +63,47 @@ const TodoPage = () => {
           };
         }
         return todo;
-      })
+      });
     });
-  }
+  };
   //切換成編輯模式的事件處理
-  const handleChangeMode = ({id, isEdit}) => {
+  const handleChangeMode = ({ id, isEdit }) => {
     setTodos((prevTodos) => {
-      return prevTodos.map(todo => {
+      return prevTodos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
-            isEdit
+            isEdit,
           };
         }
         return {
           ...todo,
           isEdit: false,
         };
-      })
+      });
     });
-  }
+  };
   //儲存編輯過的todo項目的事件處理
-  const handleSave = ({id, title}) => {
+  const handleSave = ({ id, title }) => {
     setTodos((prevTodos) => {
-      return prevTodos.map(todo => {
+      return prevTodos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
             title,
-            isEdit: false //在這裡才把編輯完成的TodoItem跳出編輯模式
+            isEdit: false, //在這裡才把編輯完成的TodoItem跳出編輯模式
           };
         }
         return todo;
-      })
+      });
     });
-  }
-
+  };
+  //刪除todo的'X'按鈕被點擊的事件處理
+  const handleDelete = (id) => {
+    setTodos((prevTodos) => {
+      return prevTodos.filter((todo) => todo.id !== id);
+    });
+  };
 
   return (
     <div>
@@ -115,8 +120,9 @@ const TodoPage = () => {
         onToggleDone={handleToggleDone}
         onChangeMode={handleChangeMode}
         onSave={handleSave}
+        onDelete={handleDelete}
       />
-      <Footer />
+      <Footer todos={todos} />
     </div>
   );
 };
