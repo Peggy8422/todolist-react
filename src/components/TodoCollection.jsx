@@ -10,9 +10,19 @@ const TodoCollection = ({
   return (
     <div>
       {todos.map(todo => 
-        <TodoItem key={todo.id} todo={todo} onToggleDone={(id) => {
-          onToggleDone?.(id);
-        }} />
+        <TodoItem 
+          key={todo.id} 
+          todo={todo} 
+          onToggleDone={(id) => {
+            onToggleDone?.(id);
+          }} 
+          onChangeMode={({id, isEdit}) => {
+            onChangeMode?.({id, isEdit});
+          }}
+          onSave={({id, title}) => {
+            onSave?.({id, title});
+          }}
+        />
       )}
     </div>
   );

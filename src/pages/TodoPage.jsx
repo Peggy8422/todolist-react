@@ -66,6 +66,39 @@ const TodoPage = () => {
       })
     });
   }
+  //切換成編輯模式的事件處理
+  const handleChangeMode = ({id, isEdit}) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map(todo => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            isEdit
+          };
+        }
+        return {
+          ...todo,
+          isEdit: false,
+        };
+      })
+    });
+  }
+  //儲存編輯過的todo項目的事件處理
+  const handleSave = ({id, title}) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map(todo => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            title,
+            isEdit: false //在這裡才把編輯完成的TodoItem跳出編輯模式
+          };
+        }
+        return todo;
+      })
+    });
+  }
+
 
   return (
     <div>
@@ -77,7 +110,12 @@ const TodoPage = () => {
         onAddTodo={handleTodoAdded}
         onKeyDown={handleTodoAdded}
       />
-      <TodoCollection todos={todos} onToggleDone={handleToggleDone} />
+      <TodoCollection
+        todos={todos}
+        onToggleDone={handleToggleDone}
+        onChangeMode={handleChangeMode}
+        onSave={handleSave}
+      />
       <Footer />
     </div>
   );
