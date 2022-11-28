@@ -1,4 +1,4 @@
-//API 設定檔
+//API 串接設定檔
 import axios from 'axios';
 const baseUrl = 'http://localhost:3001';
 
@@ -11,6 +11,7 @@ export const getTodos = async () => {
     console.error('[Get Todos failed]: ', error);
   }
 };
+
 //"新增一筆Todo"的函式模組 *payload代表打包過後的資料(一包物件，可解構賦值取得內部資料)
 export const createTodo = async (payload) => {
   const { title, isDone } = payload;
@@ -24,5 +25,27 @@ export const createTodo = async (payload) => {
     console.error('[Create Todo failed]: ',error);
   }
 };
-export const patchTodo = () => {};
-export const deleteTodo = () => {};
+
+//"修改一筆Todo"的函式模組
+export const patchTodo = async (payload) => {
+  const { id, title, isDone } = payload;
+  try {
+    const res = await axios.patch(`${baseUrl}/todos/${id}`, {
+      title,
+      isDone,
+    });
+    return res.data;
+  } catch (error) {
+    console.error('[Patch Todo failed]: ', error);
+  }
+};
+
+//"刪除一筆Todo"的函式模組
+export const deleteTodo = async (id) => {
+  try {
+    const res = await axios.delete(`${baseUrl}/todo/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error('[Delete Todo failed]:', error);
+  }
+};
