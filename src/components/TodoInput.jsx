@@ -81,7 +81,10 @@ const TodoInput = ({inputValue, onChange, onKeyDown, onAddTodo}) => {
           placeholder="新增工作"
           value={inputValue}
           onChange={(e) => {
-            onChange?.(e.target.value); //這個值會帶給TodoPage給裡面的handleInput去setInputValue
+            onChange?.(e.target.value); //這個值會帶給TodoPage那邊定義的handleChange去setInputValue
+            // 以上寫法等同: if (onChange) {
+            //                onChange(event.target.value); 
+            //              }
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {

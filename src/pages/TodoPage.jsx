@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Footer, Header, TodoCollection, TodoInput } from 'components';
+import { createTodo, getTodos } from 'api/todos';
 
 const dummyTodos = [
   {
@@ -24,7 +25,7 @@ const dummyTodos = [
   },
 ];
 
-let nextTodoId = 4;
+// let nextTodoId = 4;
 
 const TodoPage = () => {
   const [inputValue, setInputValue] = useState('');
@@ -35,22 +36,32 @@ const TodoPage = () => {
     setInputValue(value);
   };
   //按下"新增"按鈕或是"Enter"鍵時的事件處理
-  const handleTodoAdded = () => {
+  const handleTodoAdded = async () => {
     if (inputValue.trim().length === 0) {
       alert('Please type in valid text!');
       return;
     }
-    setTodos((prevTodos) => {
-      return [
-        ...prevTodos,
-        {
-          id: nextTodoId++,
-          title: inputValue,
-          isDone: false,
-        },
-      ];
-    });
-    setInputValue('');
+    try {
+      const data = await createTodo({
+        title: inputValue,
+        isDone: false,
+      });
+      setTodos((prevTodos) => {
+        return [
+          ...prevTodos,
+          {
+            id: data.id,
+            title: data.title,
+            isDone: data.isDone,
+            isEdit: false,
+          },
+        ];
+      });
+      setInputValue('');
+    } catch (error) {
+      console.error(error);
+    }
+    
   };
   //切換完成/未完成狀態的事件處理
   const handleToggleDone = (id) => {
@@ -104,6 +115,18 @@ const TodoPage = () => {
       return prevTodos.filter((todo) => todo.id !== id);
     });
   };
+
+  useEffect(() => {
+    const getTodosAsync = async () => {
+      try {
+        const todos = await getTodos();
+        setTodos(todos.map(todo => ({...todo, isEdit: false})));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getTodosAsync();
+  }, []);
 
   return (
     <div>
