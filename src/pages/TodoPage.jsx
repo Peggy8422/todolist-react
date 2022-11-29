@@ -1,11 +1,30 @@
 import { useState, useEffect } from 'react';
 import { Footer, Header, TodoCollection, TodoInput } from 'components';
 import { createTodo, deleteTodo, getTodos, patchTodo } from 'api/todos';
+import { useNavigate } from 'react-router-dom';
+import { checkPermission } from 'api/auth';
 
 
 const TodoPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [todos, setTodos] = useState([]);
+  const navigate = useNavigate();
+
+  // 進入Todo頁面前驗證Token是否存在和有效
+  useEffect(() => {
+    const checkTokenIsValid = async () => {
+      const authToken = localStorage.getItem('authToken');
+      if (!authToken) {
+        navigate('/login');
+      }
+      const result = await checkPermission(authToken);
+      if (!result) {
+        navigate('/login');
+      }
+    };
+
+    checkTokenIsValid();
+  }, [navigate]);
 
   //新增todo的輸入框輸入值改變時的事件處理
   const handleChange = (value) => {
@@ -37,11 +56,10 @@ const TodoPage = () => {
     } catch (error) {
       console.error(error);
     }
-    
   };
   //切換完成/未完成狀態的事件處理
   const handleToggleDone = async (id) => {
-    const currentTodo = todos.find(todo => todo.id === id);
+    const currentTodo = todos.find((todo) => todo.id === id);
     try {
       const data = await patchTodo({
         id,
@@ -109,14 +127,13 @@ const TodoPage = () => {
     } catch (error) {
       console.error(error);
     }
-    
   };
 
   useEffect(() => {
     const getTodosAsync = async () => {
       try {
         const todos = await getTodos();
-        setTodos(todos.map(todo => ({...todo, isEdit: false})));
+        setTodos(todos.map((todo) => ({ ...todo, isEdit: false })));
       } catch (error) {
         console.error(error);
       }
