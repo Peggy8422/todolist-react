@@ -42,3 +42,18 @@ export const register = async ({username, email, password}) => {
   }
 
 };
+
+// 驗證登入Token的函式模組
+export const checkPermission = async (authToken) => {
+  try {
+    const response =  await axios.get(`${authURL}/test-token`, {
+      headers: {
+        Authorization: 'Bearer ' + authToken,
+      },
+    });
+    return response.data.success;
+
+  } catch (error) {
+    console.error('[Check Permission Failed]: ', error);
+  }
+};
