@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Footer, Header, TodoCollection, TodoInput } from 'components';
 import { createTodo, deleteTodo, getTodos, patchTodo } from 'api/todos';
 
-// let nextTodoId = 4;
 
 const TodoPage = () => {
   const [inputValue, setInputValue] = useState('');
