@@ -11,7 +11,7 @@ const TodoPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
-  // 進入Todo頁面前驗證Token是否存在和有效
+  // 正式進入Todo頁面前，檢查身分是否已驗證
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');
