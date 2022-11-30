@@ -9,7 +9,7 @@ const TodoPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [todos, setTodos] = useState([]);
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, currentMember } = useAuth();
 
   // 正式進入Todo頁面前，檢查身分是否已驗證
   useEffect(() => {
@@ -136,7 +136,7 @@ const TodoPage = () => {
   return (
     <div>
       TodoPage
-      <Header />
+      <Header userName={currentMember?.name} />
       <TodoInput
         inputValue={inputValue}
         onChange={handleChange}
