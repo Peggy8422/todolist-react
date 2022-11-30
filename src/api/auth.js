@@ -43,7 +43,7 @@ export const register = async ({username, email, password}) => {
 
 };
 
-// 驗證登入Token的函式模組
+// 驗證登入Token是否有效的函式模組
 export const checkPermission = async (authToken) => {
   try {
     const response =  await axios.get(`${authURL}/test-token`, {
