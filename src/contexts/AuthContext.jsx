@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
       }
       const result = await checkPermission(authToken);
       if (result) {
-        setIsAuthenticated(false);
+        setIsAuthenticated(true);
         const tempPayload = jwt.decode(authToken);
         setPayload(tempPayload);
       } else {
